@@ -94,11 +94,11 @@ FDirection_Struct AMyPaperCharacter::AnimationStateMachine(bool isFalling, bool 
 {
 	switch (CharacterState)
 	{
-	case ECharacterState::IDLE:
+	case ECharacterState::idle:
 		break;
-	case ECharacterState::WALKING:
+	case ECharacterState::walk:
 		break;
-	case ECharacterState::JUMPING:
+	case ECharacterState::jump:
 		break;
 	default:
 		break;

@@ -10,7 +10,8 @@
 UENUM(BlueprintType)
 enum class ECharacterState : uint8
 {
-	IDLE,
-	WALKING,
-	JUMPING
+	idle,
+	walk,
+	jump,
+	attack
 };

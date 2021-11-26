@@ -20,10 +20,11 @@ class TOPDOWNCPP_API AMyPaperCharacter : public APaperCharacter
 	
 public:
 	AMyPaperCharacter();
-	UPROPERTY(EditAnywhere, Category = "Weapon")
-	float weaponRange{1000};
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
+	
+	// ================================================================================================================
+    //   ANIMATION
+    // ================================================================================================================
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
 	ECharacterState CharacterState;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
 	FDirection_Struct IdleAnim;
@@ -33,6 +34,7 @@ public:
 	FDirection_Struct JumpAnim;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
 	FDirection_Struct AttackAnim;
+
 	UFUNCTION(BlueprintCallable, Category = "Animation")
 	void setAnimDirection(FDirection_Struct anim, EDirection direction);
 	UFUNCTION(BlueprintCallable, Category = "Animation")
@@ -40,8 +42,6 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Animation")
 	EDirection RotationToDirection(float direction);
 
-	UFUNCTION(BlueprintCallable, Category = "Weapon")
-	void fireWeapon();
 	bool IsInAir() const
 	{
 		const FVector Velocity = GetVelocity();
@@ -59,6 +59,16 @@ public:
 		const FVector Velocity = GetVelocity();
 		return FMath::Abs(Velocity.X) <= KINDA_SMALL_NUMBER;
 	}
+
+	// ================================================================================================================
+    //   Weapons
+    // ================================================================================================================
+    UPROPERTY(EditAnywhere, Category = "Weapon")
+	float weaponRange{1000};
+
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	void fireWeapon();
+	
 protected:
 	FHitResult instantHit();
 };
