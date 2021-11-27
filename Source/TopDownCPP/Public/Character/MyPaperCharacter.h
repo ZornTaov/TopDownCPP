@@ -8,6 +8,7 @@
 #include "Direction_Struct.h"
 #include "Direction.h"
 #include "CharacterState.h"
+#include "CharacterAnimationStruct.h"
 #include "MyPaperCharacter.generated.h"
 
 /**
@@ -26,19 +27,11 @@ public:
     // ================================================================================================================
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
 	ECharacterState CharacterState;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
-	FDirection_Struct IdleAnim;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
-	FDirection_Struct WalkAnim;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
-	FDirection_Struct JumpAnim;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
-	FDirection_Struct AttackAnim;
 
 	UFUNCTION(BlueprintCallable, Category = "Animation")
-	void setAnimDirection(FDirection_Struct anim, EDirection direction);
+	void setAnimAndDirection(FDirection_Struct anim, EDirection direction);
 	UFUNCTION(BlueprintCallable, Category = "Animation")
-	FDirection_Struct AnimationStateMachine(bool isFalling, bool isMoving);
+	FString GetMovementState();
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Animation")
 	EDirection RotationToDirection(float direction);
 
@@ -51,13 +44,13 @@ public:
 	bool IsWalking() const
 	{
 		const FVector Velocity = GetVelocity();
-		return (Velocity.Size() > 0);
+		return (Velocity.Size2D() > 0);
 	}
 
 	bool IsIdle() const
 	{
 		const FVector Velocity = GetVelocity();
-		return FMath::Abs(Velocity.X) <= KINDA_SMALL_NUMBER;
+		return Velocity.Size2D() <= KINDA_SMALL_NUMBER;
 	}
 
 	// ================================================================================================================

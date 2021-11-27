@@ -5,6 +5,9 @@
 #include "PaperFlipbookComponent.h"
 #include "CharacterState.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "CharacterAnimationStruct.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "Engine/EngineTypes.h"
 
 // Sets default values
 AMyPaperCharacter::AMyPaperCharacter()
@@ -68,7 +71,7 @@ EDirection AMyPaperCharacter::RotationToDirection(float direction)
 	}
 }
 
-void AMyPaperCharacter::setAnimDirection(FDirection_Struct anim, EDirection direction)
+void AMyPaperCharacter::setAnimAndDirection(FDirection_Struct anim, EDirection direction)
 {
 	switch (direction)
 	{
@@ -90,18 +93,34 @@ void AMyPaperCharacter::setAnimDirection(FDirection_Struct anim, EDirection dire
 	}
 }
 
-FDirection_Struct AMyPaperCharacter::AnimationStateMachine(bool isFalling, bool isMoving)
+FString AMyPaperCharacter::GetMovementState()
 {
-	switch (CharacterState)
+	FString str = "";
+	if (!(GetCharacterMovement()->IsFalling() || GetCharacterMovement()->MovementMode == EMovementMode::MOVE_Custom))
 	{
-	case ECharacterState::idle:
-		break;
-	case ECharacterState::walk:
-		break;
-	case ECharacterState::jump:
-		break;
-	default:
-		break;
+		FString str1 = (IsIdle() ? "idle" : "walking");
+		FString str2 = (bIsCrouched ? "_crouched" : "");
+		str = FString::Printf(TEXT("%s%s"), *str1, *str2);
 	}
-	return WalkAnim;
+	if (GetCharacterMovement()->IsFalling())
+	{
+		/* jumping */
+		str = GetVelocity().Z > 0 ? "jumping" : "falling";
+	}
+	
+	if (GetCharacterMovement()->MovementMode == EMovementMode::MOVE_Custom)
+	{
+		switch (GetCharacterMovement()->CustomMovementMode)
+		{
+		case 0:
+			/* ATTACK 0 */
+			str = "attack_0";
+			break;
+		
+		default:
+			break;
+		}
+	}
+	
+	return str;
 }
